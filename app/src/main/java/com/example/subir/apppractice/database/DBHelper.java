@@ -5,7 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.subir.apppractice.model.BookData;
 import com.example.subir.apppractice.utils.Constants;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class DBHelper {
 
@@ -100,5 +104,31 @@ public class DBHelper {
         }
 
         return  rowCount;
+    }
+
+    public List<BookData> getAllBooks(){
+        List<BookData> books = new LinkedList<>();
+        String query ="select * from "+Constants.BOOK_TABlE;
+
+        Cursor c = db.rawQuery(query,null);
+
+        BookData book = null;
+
+        if(c.moveToFirst()){
+
+            do{
+                book = new BookData();
+                book.setId(c.getInt(0));
+                book.setBookName(c.getString(1).toString());
+                book.setBookAuthor(c.getString(2).toString());
+                book.setBookId(c.getString(3).toString());
+
+                books.add(book);
+            }while(c.moveToNext());
+
+            c.close();
+
+        }
+        return  books;
     }
 }
